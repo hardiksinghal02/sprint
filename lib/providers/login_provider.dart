@@ -12,7 +12,7 @@ class LoginProvider with ChangeNotifier {
       await Firebase.initializeApp();
       user = FirebaseAuth.instance.currentUser;
     } catch (e) {
-      print(e);
+      print("Error in setting user " + e.toString());
     }
   }
 
@@ -22,6 +22,10 @@ class LoginProvider with ChangeNotifier {
 
   User? getUser() {
     return user;
+  }
+
+  String getUserId() {
+    return user!.uid;
   }
 
   Future<void> signOut() async {
@@ -47,7 +51,7 @@ class LoginProvider with ChangeNotifier {
       UserCredential result = await auth.signInWithCredential(authCredential);
       print((result.user?.email).toString() + " Authenticated");
     } catch (error) {
-      print(error);
+      print("Error in sign in  : " + error.toString());
     }
   }
 }
