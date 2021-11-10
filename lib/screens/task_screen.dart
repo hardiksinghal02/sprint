@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sprint/models/status_doc_model.dart';
 import 'package:sprint/models/task_model.dart';
 import 'package:sprint/providers/task_provider.dart';
 import 'package:sprint/widgets/new_task_widget.dart';
@@ -19,6 +20,13 @@ class _TaskScreenState extends State<TaskScreen> {
     final taskProvider = Provider.of<TaskProvider>(context);
 
     tasks = taskProvider.getTasks();
+
+    StatusDoc getStatusDoc() {
+      print("Local getStatusDoc was called");
+      return taskProvider.getCurrentStatusDoc();
+    }
+
+    StatusDoc statusDoc = taskProvider.getCurrentStatusDoc();
 
     void addTask() {
       showModalBottomSheet(
@@ -56,7 +64,17 @@ class _TaskScreenState extends State<TaskScreen> {
         Divider(
           color: Colors.grey,
         ),
-        TaskListWidget(tasks: tasks),
+        TaskListWidget(
+          tasks: tasks,
+          statusDoc: statusDoc,
+          onUpdate: () {
+            print("onUpdate was called");
+            setState(() {
+              print("calling getStatusDoc locally");
+              statusDoc = getStatusDoc();
+            });
+          },
+        ),
         FloatingActionButton(
           onPressed: addTask,
           child: Icon(Icons.add),
